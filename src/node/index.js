@@ -220,12 +220,12 @@ function peersConnected(options) {
  * GET Peers
  *
  * @param{Object} options
- * @param{string} address - Network address of the peer in form of a.b.c.d
+ * @param{string} addr - Network address of the peer, a.b.c.d
  */
-function peers(options, address) {
+function peers(options, addr) {
   return new Promise((resolve, reject) => {
     options.agent.get(
-      format({ ...options, pathname: `/v1/peers/${address}` }),
+      format({ ...options, pathname: `/v1/peers/${addr}` }),
       { auth: `${options.user}:${options.password}` },
       response(resolve, reject)
     );
