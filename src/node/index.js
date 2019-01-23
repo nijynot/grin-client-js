@@ -25,10 +25,6 @@ function blocks(options, param) {
  * @param{Object} options
  * @param{string|number} param - Hash, height or commit
  */
-    port: 3413,
-    hostname: '127.0.0.1',
-    username: 'grin',
-    password: 'xHGUzK7Mxxd
 function headers(options, param) {
   return new Promise((resolve, reject) => {
     options.agent.get(
