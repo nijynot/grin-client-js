@@ -8,7 +8,7 @@ function format(options) {
 
   let search = '';
   if (options.search) {
-    search = '?' + querystring.stringify(options.search)
+    search = '?' + querystring.stringify(options.search);
   }
 
   const nodeUrl = url.parse(
@@ -24,8 +24,7 @@ function response(resolve, reject) {
   return (res) => {
     let error;
     if (res.statusCode !== 200) {
-      error = new Error('Request Failed.\n' +
-                        `Status Code: ${res.statusCode}`);
+      error = new Error('Request Failed.\n' + `Status Code: ${res.statusCode}`);
       reject(error);
     }
 
