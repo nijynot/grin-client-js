@@ -29,3 +29,42 @@ const GrinClient = require('grin-client');
   }
 })();
 ```
+
+## API
+
+**`.blocks(id)`**  
+&emsp;&emsp;`id`: `<string>` can be hash, height or commit.  
+**`.headers(id)`**  
+&emsp;&emsp;`id`: `<string>` can be hash, height or commit.  
+**`.chain()`**  
+**`.chainCompact()`**  
+**`.chainValidate()`**  
+**`.chainOutputsByIds(ids)`**  
+&emsp;&emsp;`ids`: `<string[]>`  
+**`.chainOutputsByHeight(obj)`**  
+&emsp;&emsp;`obj`: `<Object>`  
+&emsp;&emsp;&emsp;&emsp;`startHeight`: `<integer>`  
+&emsp;&emsp;&emsp;&emsp;`endHeight`: `<integer>`  
+**`.status()`**  
+**`.txhashsetRoots()`**  
+**`.txhashsetLastOutputs(n)`**  
+&emsp;&emsp;`n`: `<integer>`  
+**`.txhashsetLastRangeProofs(n)`**  
+&emsp;&emsp;`n`: `<integer>`  
+**`.txhashsetLastKernels(n)`**  
+&emsp;&emsp;`n`: `<integer>`  
+**`.txhashsetOutputs(obj)`**  
+&emsp;&emsp;`obj`: `<Object>`  
+&emsp;&emsp;&emsp;&emsp;`startIndex`: `<integer>`  
+&emsp;&emsp;&emsp;&emsp;`max`: `<integer>`  
+**`.txhashsetMerkleProof(id)`**  
+&emsp;&emsp;`id`: `<string>`  
+**`.pool()`**  
+**`.peersBan(addr)`**  
+&emsp;&emsp;`addr`: `<string>`  
+**`.peersUnban(addr)`**  
+&emsp;&emsp;`addr`: `<string>`  
+**`.peersAll()`**  
+**`.peersConnected()`**  
+**`.peers(addr)`**  
+&emsp;&emsp;`addr`: `<string>`
