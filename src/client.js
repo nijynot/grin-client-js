@@ -37,8 +37,8 @@ class GrinClient {
     return node.chainValidate(this.options);
   }
 
-  chainOutputsByIds(id) {
-    return node.chainOutputsByIds(this.options, id);
+  chainOutputsByIds(ids) {
+    return node.chainOutputsByIds(this.options, ids);
   }
 
   chainOutputsByHeight(params) {
@@ -77,9 +77,9 @@ class GrinClient {
     return node.pool(this.options);
   }
 
-  poolPush(params) {
-    return node.poolPush(this.options, params);
-  }
+  // poolPush(params) {
+  //   return node.poolPush(this.options, params);
+  // }
 
   peersBan(addr) {
     return node.peersBan(this.options, addr);
@@ -98,9 +98,8 @@ class GrinClient {
   }
 
   peers(addr) {
-    return node.peers(this.options);
+    return node.peers(this.options, addr);
   }
-
 }
 
 module.exports = GrinClient;

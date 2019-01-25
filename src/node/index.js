@@ -1,4 +1,6 @@
-const { request } = require('../utils/request');
+const querystring = require('querystring');
+
+const { request, responseCode } = require('../utils/request');
 
 /**
  * GET Blocks
@@ -39,7 +41,7 @@ function chain(options) {
   return request({
     ...options,
     method: 'GET',
-    path: `/v1/chain/`,
+    path: `/v1/chain`,
   });
 }
 
@@ -53,7 +55,7 @@ function chainCompact(options) {
     ...options,
     method: 'POST',
     path: `/v1/chain/compact`,
-  });
+  }, responseCode);
 }
 
 /**
@@ -66,14 +68,14 @@ function chainValidate(options) {
     ...options,
     method: 'POST',
     path: `/v1/chain/validate`,
-  });
+  }, responseCode);
 }
 
 /**
  * GET Chain Outputs By IDs
  *
  * @param{Object} options
- * @param{Array|string} id
+ * @param{Array|string} ids
  */
 function chainOutputsByIds(options, ids) {
   const search = { id: ids };
@@ -252,8 +254,8 @@ function peersBan(options, addr) {
   return request({
     ...options,
     method: 'POST',
-    path: `/v1/peers/all${addr}/ban`,
-  });
+    path: `/v1/peers/${addr}/ban`,
+  }, responseCode);
 }
 
 /**
@@ -266,8 +268,8 @@ function peersUnban(options, addr) {
   return request({
     ...options,
     method: 'POST',
-    path: `/v1/peers/all${addr}/unban`,
-  });
+    path: `/v1/peers/${addr}/unban`,
+  }, responseCode);
 }
 
 /**

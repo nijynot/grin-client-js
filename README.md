@@ -8,23 +8,24 @@
 ## Usage
 ### Example
 ```js
-const GrinClient = require('./src/index');
+const GrinClient = require('grin-client');
 
 (async function () {
+  const API_SECRET = '...';
   const grin = new GrinClient({
     protocol: 'http',
     hostname: '127.0.0.1',
     port: 3413,
     username: 'grin',
-    password: 'api_secret',
+    password: API_SECRET,
   });
 
   try {
     const status = await grin.status();
-    const block = await grin.block(13474);
-    ...
-  } catch(err) {
-    console.log(err);
+    const block = await grin.blocks(13474);
+    // ...
+  } catch(e) {
+    console.log(e);
   }
 })();
 ```
