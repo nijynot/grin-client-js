@@ -65,8 +65,8 @@ class GrinClient {
     return node.txhashsetLastKernels(this.options, n);
   }
 
-  txhashsetOutPuts(params) {
-    return node.txhashsetOutPuts(this.options, params);
+  txhashsetOutputs(params) {
+    return node.txhashsetOutputs(this.options, params);
   }
 
   txhashsetMerkleProof(id) {

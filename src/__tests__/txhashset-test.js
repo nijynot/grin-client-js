@@ -188,7 +188,7 @@ describe('Node API: GET TxHashSet Outputs', () => {
       .reply(200, res);
 
     const grin = new GrinClient(testOptions);
-    expect(await grin.txhashsetOutPuts({ startIndex: 1, max: 3 })).to.deep.equal(res);
+    expect(await grin.txhashsetOutputs({ startIndex: 1, max: 3 })).to.deep.equal(res);
   });
 
   it('reject if status code not 200', async () => {
@@ -198,7 +198,7 @@ describe('Node API: GET TxHashSet Outputs', () => {
 
     const grin = new GrinClient(testOptions);
     try {
-      await grin.txhashsetOutPuts({ startIndex: 1, max: 3 });
+      await grin.txhashsetOutputs({ startIndex: 1, max: 3 });
     } catch (e) {
       expect(e.message).to.equal(`Request Failed. Status Code: ${500}`);
     }

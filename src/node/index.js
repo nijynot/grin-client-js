@@ -185,7 +185,7 @@ function txhashsetLastKernels(options, n) {
  * @param{number} params.startIndex
  * @param{number} params.max
  */
-function txhashsetOutPuts(options, params) {
+function txhashsetOutputs(options, params) {
   const search = {
     start_index: params.startIndex,
     max: params.max,
@@ -325,7 +325,7 @@ module.exports = {
   txhashsetLastOutputs,
   txhashsetLastRangeProofs,
   txhashsetLastKernels,
-  txhashsetOutPuts,
+  txhashsetOutputs,
   txhashsetMerkleProof,
   pool,
   poolPush,
