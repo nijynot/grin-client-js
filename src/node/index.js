@@ -1,5 +1,4 @@
-const { format, response } = require('../utils/request');
-const url = require('url');
+const { request } = require('../utils/request');
 
 /**
  * GET Blocks
@@ -9,12 +8,10 @@ const url = require('url');
  */
 function blocks(options, param) {
   if (typeof param !== 'array') {
-    return new Promise((resolve, reject) => {
-      options.agent.get(
-        format({ ...options, pathname: `/v1/blocks/${param}` }),
-        { auth: `${options.user}:${options.password}` },
-        response(resolve, reject)
-      );
+    return request({
+      ...options,
+      method: 'GET',
+      path: `/v1/blocks/${param}`,
     });
   }
 }
@@ -26,12 +23,10 @@ function blocks(options, param) {
  * @param{string|number} param - Hash, height or commit
  */
 function headers(options, param) {
-  return new Promise((resolve, reject) => {
-    options.agent.get(
-      format({ ...options, pathname: `/v1/headers/${param}` }),
-      { auth: `${options.user}:${options.password}` },
-      response(resolve, reject)
-    );
+  return request({
+    ...options,
+    method: 'GET',
+    path: `/v1/headers/${param}`,
   });
 }
 
@@ -41,12 +36,71 @@ function headers(options, param) {
  * @param{Object} options
  */
 function chain(options) {
-  return new Promise((resolve, reject) => {
-    options.agent.get(
-      format({ ...options, pathname: `/v1/chain` }),
-      { auth: `${options.user}:${options.password}` },
-      response(resolve, reject)
-    );
+  return request({
+    ...options,
+    method: 'GET',
+    path: `/v1/chain/`,
+  });
+}
+
+/**
+ * POST Chain Compact
+ *
+ * @param{Object} options
+ */
+function chainCompact(options) {
+  return request({
+    ...options,
+    method: 'POST',
+    path: `/v1/chain/compact`,
+  });
+}
+
+/**
+ * POST Chain Validate
+ *
+ * @param{Object} options
+ */
+function chainValidate(options) {
+  return request({
+    ...options,
+    method: 'POST',
+    path: `/v1/chain/validate`,
+  });
+}
+
+/**
+ * GET Chain Outputs By IDs
+ *
+ * @param{Object} options
+ * @param{Array|string} id
+ */
+function chainOutputsByIds(options, ids) {
+  const search = { id: ids };
+  return request({
+    ...options,
+    method: 'GET',
+    path: `/v1/chain/outputs/byids?${querystring.stringify(search)}`,
+  });
+}
+
+/**
+ * GET Chain Outputs By Height
+ *
+ * @param{Object} options
+ * @param{Object} params
+ * @param{number} params.startHeight
+ * @param{number} params.endHeight
+ */
+function chainOutputsByHeight(options, params) {
+  const search = {
+    start_height: params.startHeight,
+    end_height: params.endHeight,
+  };
+  return request({
+    ...options,
+    method: 'GET',
+    path: `/v1/chain/outputs/byheight?${querystring.stringify(search)}`,
   });
 }
 
@@ -56,12 +110,10 @@ function chain(options) {
  * @param{Object} options
  */
 function status(options) {
-  return new Promise((resolve, reject) => {
-    options.agent.get(
-      format({ ...options, pathname: `/v1/status` }),
-      { auth: `${options.user}:${options.password}` },
-      response(resolve, reject)
-    );
+  return request({
+    ...options,
+    method: 'GET',
+    path: `/v1/status`,
   });
 }
 
@@ -71,12 +123,10 @@ function status(options) {
  * @param{Object} options
  */
 function txhashsetRoots(options) {
-  return new Promise((resolve, reject) => {
-    options.agent.get(
-      format({ ...options, pathname: `/v1/txhashset/roots` }),
-      { auth: `${options.user}:${options.password}` },
-      response(resolve, reject)
-    );
+  return request({
+    ...options,
+    method: 'GET',
+    path: `/v1/txhashset/roots`,
   });
 }
 
@@ -87,12 +137,11 @@ function txhashsetRoots(options) {
  * @param{number} n
  */
 function txhashsetLastOutputs(options, n) {
-  return new Promise((resolve, reject) => {
-    options.agent.get(
-      format({ ...options, pathname: `/v1/txhashset/lastoutputs`, search: { n: n } }),
-      { auth: `${options.user}:${options.password}` },
-      response(resolve, reject)
-    );
+  const search = { n: n };
+  return request({
+    ...options,
+    method: 'GET',
+    path: `/v1/txhashset/lastoutputs?${querystring.stringify(search)}`,
   });
 }
 
@@ -103,12 +152,11 @@ function txhashsetLastOutputs(options, n) {
  * @param{number} n
  */
 function txhashsetLastRangeProofs(options, n) {
-  return new Promise((resolve, reject) => {
-    options.agent.get(
-      format({ ...options, pathname: `/v1/txhashset/lastrangeproofs`, search: { n: n } }),
-      { auth: `${options.user}:${options.password}` },
-      response(resolve, reject)
-    );
+  const search = { n: n };
+  return request({
+    ...options,
+    method: 'GET',
+    path: `/v1/txhashset/lastrangeproofs?${querystring.stringify(search)}`,
   });
 }
 
@@ -119,12 +167,11 @@ function txhashsetLastRangeProofs(options, n) {
  * @param{number} n
  */
 function txhashsetLastKernels(options, n) {
-  return new Promise((resolve, reject) => {
-    options.agent.get(
-      format({ ...options, pathname: `/v1/txhashset/lastkernels`, search: { n: n } }),
-      { auth: `${options.user}:${options.password}` },
-      response(resolve, reject)
-    );
+  const search = { n: n };
+  return request({
+    ...options,
+    method: 'GET',
+    path: `/v1/txhashset/lastkernels?${querystring.stringify(search)}`,
   });
 }
 
@@ -137,17 +184,14 @@ function txhashsetLastKernels(options, n) {
  * @param{number} params.max
  */
 function txhashsetOutPuts(options, params) {
-  return new Promise((resolve, reject) => {
-    options.agent.get(
-      format({ ...options, pathname: `/v1/txhashset/outputs`, search:
-        {
-          start_index: params.startIndex,
-          max: params.max,
-        },
-      }),
-      { auth: `${options.user}:${options.password}` },
-      response(resolve, reject)
-    );
+  const search = {
+    start_index: params.startIndex,
+    max: params.max,
+  };
+  return request({
+    ...options,
+    method: 'GET',
+    path: `/v1/txhashset/outputs?${querystring.stringify(search)}`,
   });
 }
 
@@ -158,12 +202,11 @@ function txhashsetOutPuts(options, params) {
  * @param{string} id
  */
 function txhashsetMerkleProof(options, id) {
-  return new Promise((resolve, reject) => {
-    options.agent.get(
-      format({ ...options, pathname: `/v1/txhashset/merkleproof`, search: { id: id } }),
-      { auth: `${options.user}:${options.password}` },
-      response(resolve, reject)
-    );
+  const search = { id: id };
+  return request({
+    ...options,
+    method: 'GET',
+    path: `/v1/txhashset/merkleproof?${querystring.stringify(search)}`,
   });
 }
 
@@ -173,12 +216,57 @@ function txhashsetMerkleProof(options, id) {
  * @param{Object} options
  */
 function pool(options) {
-  return new Promise((resolve, reject) => {
-    options.agent.get(
-      format({ ...options, pathname: `/v1/pool` }),
-      { auth: `${options.user}:${options.password}` },
-      response(resolve, reject)
-    );
+  return request({
+    ...options,
+    method: 'GET',
+    path: `/v1/pool`,
+  });
+}
+
+/**
+ * POST Pool Push
+ *
+ * @param{Object} options
+ * @param{Object} params
+ * @param{string} file - hex encoded transaction
+ * @param{bool} params.fluff - Adds ?fluff at the end of the URL to bypass Dandelion relay.
+ */
+function poolPush(options, params) {
+  // TODO: Implement file data param and fluff
+  // const fluff = (params.fluff) ? 'fluff' : '';
+  // const data = { file: params.file };
+  return request({
+    ...options,
+    method: 'POST',
+    path: `/v1/pool/push`,
+  });
+}
+
+/**
+ * POST Peers Ban
+ *
+ * @param{Object} options
+ * @param{string} addr
+ */
+function peersBan(options, addr) {
+  return request({
+    ...options,
+    method: 'POST',
+    path: `/v1/peers/all${addr}/ban`,
+  });
+}
+
+/**
+ * POST Peers Unban
+ *
+ * @param{Object} options
+ * @param{string} addr
+ */
+function peersUnban(options, addr) {
+  return request({
+    ...options,
+    method: 'POST',
+    path: `/v1/peers/all${addr}/unban`,
   });
 }
 
@@ -188,12 +276,10 @@ function pool(options) {
  * @param{Object} options
  */
 function peersAll(options) {
-  return new Promise((resolve, reject) => {
-    options.agent.get(
-      format({ ...options, pathname: `/v1/peers/all` }),
-      { auth: `${options.user}:${options.password}` },
-      response(resolve, reject)
-    );
+  return request({
+    ...options,
+    method: 'GET',
+    path: `/v1/peers/all`,
   });
 }
 
@@ -203,12 +289,10 @@ function peersAll(options) {
  * @param{Object} options
  */
 function peersConnected(options) {
-  return new Promise((resolve, reject) => {
-    options.agent.get(
-      format({ ...options, pathname: `/v1/peers/connected` }),
-      { auth: `${options.user}:${options.password}` },
-      response(resolve, reject)
-    );
+  return request({
+    ...options,
+    method: 'GET',
+    path: `/v1/peers/connected`,
   });
 }
 
@@ -219,12 +303,10 @@ function peersConnected(options) {
  * @param{string} addr - Network address of the peer, a.b.c.d
  */
 function peers(options, addr) {
-  return new Promise((resolve, reject) => {
-    options.agent.get(
-      format({ ...options, pathname: `/v1/peers/${addr}` }),
-      { auth: `${options.user}:${options.password}` },
-      response(resolve, reject)
-    );
+  return request({
+    ...options,
+    method: 'GET',
+    path: `/v1/peers/${addr}`,
   });
 }
 
@@ -232,6 +314,10 @@ module.exports = {
   blocks,
   headers,
   chain,
+  chainCompact,
+  chainValidate,
+  chainOutputsByIds,
+  chainOutputsByHeight,
   status,
   txhashsetRoots,
   txhashsetLastOutputs,
@@ -240,6 +326,9 @@ module.exports = {
   txhashsetOutPuts,
   txhashsetMerkleProof,
   pool,
+  poolPush,
+  peersBan,
+  peersUnban,
   peersAll,
   peersConnected,
   peers,

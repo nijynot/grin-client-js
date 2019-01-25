@@ -1,3 +1,3 @@
 # grin-client-js
 
-> A Javascript client for Grin's Node API V1.
+> A Javascript client for Grin's V1 API.

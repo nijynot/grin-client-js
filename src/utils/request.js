@@ -1,24 +1,7 @@
 const url = require('url');
 const querystring = require('querystring');
-
-function format(options) {
-  if (!options.hostname) {
-    throw new Error('No host specified.');
-  }
-
-  let search = '';
-  if (options.search) {
-    search = '?' + querystring.stringify(options.search);
-  }
-
-  const nodeUrl = url.parse(
-    `${options.protocol}://${options.hostname}:${options.port}${options.pathname}${search}`
-  );
-
-  console.log(nodeUrl.href);
-
-  return nodeUrl.href;
-}
+const https = require('https');
+const http = require('http');
 
 function response(resolve, reject) {
   return (res) => {
@@ -27,6 +10,8 @@ function response(resolve, reject) {
       error = new Error('Request Failed.\n' + `Status Code: ${res.statusCode}`);
       reject(error);
     }
+
+    console.log(res.statusCode);
 
     res.setEncoding('utf8');
     let rawData = '';
@@ -41,7 +26,22 @@ function response(resolve, reject) {
   }
 }
 
+function request(options) {
+  return new Promise((resolve, reject) => {
+    const agent = (options.protocol === 'https') ? https : http;
+    const optionsCopy = Object.assign({}, options);
+
+    optionsCopy.protocol = (optionsCopy.protocol && optionsCopy.protocol + ':') || 'http:';
+
+    const req = agent.request(optionsCopy, response(resolve, reject));
+    req.on('error', (e) => {
+      console.error(`Problem with request: ${e.message}`);
+    });
+    req.end();
+  });
+}
+
 module.exports = {
-  format,
+  request,
   response,
 };
