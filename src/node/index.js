@@ -4,9 +4,8 @@ const { request, responseCode } = require('../utils/request');
 
 /**
  * GET Blocks
- *
- * @param{Object} options
- * @param{string|number} param - Hash, height or commit
+ * @param {Object} options
+ * @param {string|number} param - Hash, height or commit
  */
 function blocks(options, param) {
   if (typeof param !== 'array') {
@@ -20,9 +19,8 @@ function blocks(options, param) {
 
 /**
  * GET Headers
- *
- * @param{Object} options
- * @param{string|number} param - Hash, height or commit
+ * @param {Object} options
+ * @param {string|number} param - Hash, height or commit
  */
 function headers(options, param) {
   return request({
@@ -34,8 +32,7 @@ function headers(options, param) {
 
 /**
  * GET Chain
- *
- * @param{Object} options
+ * @param {Object} options
  */
 function chain(options) {
   return request({
@@ -47,8 +44,7 @@ function chain(options) {
 
 /**
  * POST Chain Compact
- *
- * @param{Object} options
+ * @param {Object} options
  */
 function chainCompact(options) {
   return request({
@@ -60,8 +56,7 @@ function chainCompact(options) {
 
 /**
  * POST Chain Validate
- *
- * @param{Object} options
+ * @param {Object} options
  */
 function chainValidate(options) {
   return request({
@@ -73,9 +68,8 @@ function chainValidate(options) {
 
 /**
  * GET Chain Outputs By IDs
- *
- * @param{Object} options
- * @param{Array|string} ids
+ * @param {Object} options
+ * @param {Array|string} ids
  */
 function chainOutputsByIds(options, ids) {
   const search = { id: ids };
@@ -88,11 +82,10 @@ function chainOutputsByIds(options, ids) {
 
 /**
  * GET Chain Outputs By Height
- *
- * @param{Object} options
- * @param{Object} params
- * @param{number} params.startHeight
- * @param{number} params.endHeight
+ * @param {Object} options
+ * @param {Object} params
+ * @param {number} params.startHeight
+ * @param {number} params.endHeight
  */
 function chainOutputsByHeight(options, params) {
   const search = {
@@ -108,8 +101,7 @@ function chainOutputsByHeight(options, params) {
 
 /**
  * GET Status
- *
- * @param{Object} options
+ * @param {Object} options
  */
 function status(options) {
   return request({
@@ -121,8 +113,7 @@ function status(options) {
 
 /**
  * GET TxHashSet Roots
- *
- * @param{Object} options
+ * @param {Object} options
  */
 function txhashsetRoots(options) {
   return request({
@@ -134,9 +125,8 @@ function txhashsetRoots(options) {
 
 /**
  * GET TxHashSet Last Outputs
- *
- * @param{Object} options
- * @param{number} n
+ * @param {Object} options
+ * @param {number} n
  */
 function txhashsetLastOutputs(options, n) {
   const search = { n: n };
@@ -149,7 +139,6 @@ function txhashsetLastOutputs(options, n) {
 
 /**
  * GET TxHashSet Last Range Proofs
- *
  * @param{Object} options
  * @param{number} n
  */
@@ -164,9 +153,8 @@ function txhashsetLastRangeProofs(options, n) {
 
 /**
  * GET TxHashSet Last Kernels
- *
- * @param{Object} options
- * @param{number} n
+ * @param {Object} options
+ * @param {number} n
  */
 function txhashsetLastKernels(options, n) {
   const search = { n: n };
@@ -179,11 +167,10 @@ function txhashsetLastKernels(options, n) {
 
 /**
  * GET TxHashSet Outputs
- *
- * @param{Object} options
- * @param{Object} params
- * @param{number} params.startIndex
- * @param{number} params.max
+ * @param {Object} options
+ * @param {Object} params
+ * @param {number} params.startIndex
+ * @param {number} params.max
  */
 function txhashsetOutputs(options, params) {
   const search = {
@@ -199,9 +186,8 @@ function txhashsetOutputs(options, params) {
 
 /**
  * GET TxHashSet Merkle Proof
- *
- * @param{Object} options
- * @param{string} id
+ * @param {Object} options
+ * @param {string} id
  */
 function txhashsetMerkleProof(options, id) {
   const search = { id: id };
@@ -214,8 +200,7 @@ function txhashsetMerkleProof(options, id) {
 
 /**
  * GET Pool
- *
- * @param{Object} options
+ * @param {Object} options
  */
 function pool(options) {
   return request({
@@ -227,11 +212,10 @@ function pool(options) {
 
 /**
  * POST Pool Push
- *
- * @param{Object} options
- * @param{Object} params
- * @param{string} file - hex encoded transaction
- * @param{bool} params.fluff - Adds ?fluff at the end of the URL to bypass Dandelion relay.
+ * @param {Object} options
+ * @param {Object} params
+ * @param {string} file - hex encoded transaction
+ * @param {bool} params.fluff - Adds ?fluff at the end of the URL to bypass Dandelion relay.
  */
 function poolPush(options, params) {
   // TODO: Implement file data param and fluff
@@ -246,9 +230,8 @@ function poolPush(options, params) {
 
 /**
  * POST Peers Ban
- *
- * @param{Object} options
- * @param{string} addr
+ * @param {Object} options
+ * @param {string} addr
  */
 function peersBan(options, addr) {
   return request({
@@ -260,9 +243,8 @@ function peersBan(options, addr) {
 
 /**
  * POST Peers Unban
- *
- * @param{Object} options
- * @param{string} addr
+ * @param {Object} options
+ * @param {string} addr
  */
 function peersUnban(options, addr) {
   return request({
@@ -274,8 +256,7 @@ function peersUnban(options, addr) {
 
 /**
  * GET Peers All
- *
- * @param{Object} options
+ * @param {Object} options
  */
 function peersAll(options) {
   return request({
@@ -287,8 +268,7 @@ function peersAll(options) {
 
 /**
  * GET Peers Connected
- *
- * @param{Object} options
+ * @param {Object} options
  */
 function peersConnected(options) {
   return request({
@@ -300,9 +280,8 @@ function peersConnected(options) {
 
 /**
  * GET Peers
- *
- * @param{Object} options
- * @param{string} addr - Network address of the peer, a.b.c.d
+ * @param {Object} options
+ * @param {string} addr - Network address of the peer, a.b.c.d
  */
 function peers(options, addr) {
   return request({
