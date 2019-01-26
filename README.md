@@ -2,7 +2,7 @@
 
 > A JavaScript client for Grin's V1 API.
 
-## Installation
+## Install
 `npm install grin-client` or `yarn add grin-client`
 
 ## Usage
