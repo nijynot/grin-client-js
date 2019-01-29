@@ -3,7 +3,9 @@
 > A JavaScript client for Grin's V1 API.
 
 ## Install
-`npm install grin-client` or `yarn add grin-client`
+```
+$ npm install grin-client
+```
 
 ## Usage
 ### Example
@@ -31,7 +33,6 @@ const GrinClient = require('grin-client');
 ```
 
 ## API
-
 **`.blocks(id)`**  
 &emsp;&emsp;`id`: `<string>` can be hash, height or commit.  
 **`.headers(id)`**  
@@ -68,3 +69,10 @@ const GrinClient = require('grin-client');
 **`.peersConnected()`**  
 **`.peers(addr)`**  
 &emsp;&emsp;`addr`: `<string>`
+
+## Related
+[grin-ql-js](https://github.com/nijynot/grin-ql-js)  
+[API documentation in mimblewimble/grin](https://github.com/mimblewimble/grin/blob/master/doc/api/node_api.md)
+
+## License
+MIT
