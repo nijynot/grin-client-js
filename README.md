@@ -72,7 +72,7 @@ const GrinClient = require('grin-client');
 
 ## Related
 [grin-ql-js](https://github.com/nijynot/grin-ql-js)  
-[API documentation in mimblewimble/grin](https://github.com/mimblewimble/grin/blob/master/doc/api/node_api.md)
+[API mimblewimble/grin](https://github.com/mimblewimble/grin/blob/master/doc/api/node_api.md)
 
 ## License
 MIT

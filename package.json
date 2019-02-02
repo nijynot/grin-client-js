@@ -4,17 +4,23 @@
   "description": "A JavaScript client for Grin's V1 API.",
   "main": "./src/index.js",
   "scripts": {
-    "test": "mocha src/**/__tests__/**/*-test.js"
+    "test": "mocha src/**/__tests__/**/*-test.js",
+    "test-block": "mocha src/**/__tests__/**/blocks-test.js"
   },
   "author": {
     "email": "nijynot@gmail.com",
     "url": "https://github.com/nijynot"
   },
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "form-data": "^2.3.3",
+    "whatwg-fetch": "^3.0.0"
+  },
   "devDependencies": {
     "chai": "^4.2.0",
+    "fetch-mock": "^7.3.0",
     "mocha": "^5.2.0",
-    "nock": "^10.0.6"
+    "nock": "git+https://github.com/nijynot/nock.git",
+    "node-fetch": "^2.3.0"
   }
 }
