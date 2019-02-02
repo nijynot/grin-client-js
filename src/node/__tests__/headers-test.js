@@ -2,7 +2,7 @@ const { describe, it } = require('mocha');
 const { expect } = require('chai');
 const nock = require('nock');
 
-const GrinClient = require('../client');
+const GrinClient = require('../../client');
 
 const testOptions = {
   protocol: 'http',

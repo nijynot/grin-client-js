@@ -1,9 +1,23 @@
 const { describe, it } = require('mocha');
 const { expect } = require('chai');
 const nock = require('nock');
+// const fetchMock = require('fetch-mock');
 
-const node = require('../node/index');
-const GrinClient = require('../client');
+const node = require('../index');
+const GrinClient = require('../../client');
+const fetch = require('../../utils/fetch');
+
+// global.fetch = fetch;
+
+// console.log(global);
+
+// fetchMock.config = Object.assign({}, fetchMock.config, {
+//   fetch: global.fetch,
+// });
+
+function base64(i) {
+  return Buffer.from(i, 'utf8').toString('base64');
+}
 
 const testOptions = {
   protocol: 'http',
@@ -64,24 +78,24 @@ describe('Node API: GET Blocks', () => {
       ]
     };
 
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+    nock('http://127.0.0.1:3413')
       .get('/v1/blocks/1')
-      .reply(200, genesisBlock);
+      .matchHeader('authorization', 'Basic Z3JpbjpBUElfU0VDUkVU')
+      .reply(404, genesisBlock);
 
     const grin = new GrinClient(testOptions);
-    expect(await grin.blocks(1)).to.deep.equal(genesisBlock);
+
+    const block = await grin.blocks(1);
+    expect(block).to.deep.equal(genesisBlock);
   });
 
-  it('reject if status code 404', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('get empty block and status code 404', async () => {
+    nock('http://127.0.0.1:3413')
       .get('/v1/blocks/1')
       .reply(404);
 
     const grin = new GrinClient(testOptions);
-    try {
-      await grin.blocks(1)
-    } catch (e) {
-      expect(e.message).to.equal(`Request Failed. Status Code: ${404}`);
-    }
+    const block = await grin.blocks(1)
+    expect(block).to.deep.equal({});
   });
 });

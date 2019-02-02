@@ -1,6 +1,7 @@
 const querystring = require('querystring');
+const url = require('url');
 
-const { request, responseCode } = require('../utils/request');
+const request = require('../utils/request');
 
 /**
  * GET Blocks
@@ -9,10 +10,24 @@ const { request, responseCode } = require('../utils/request');
  */
 function blocks(options, param) {
   if (typeof param !== 'array') {
-    return request({
-      ...options,
+    return request(url.format({
+      ...options.url,
+      pathname: `/v1/blocks/${param}`,
+    }), {
       method: 'GET',
-      path: `/v1/blocks/${param}`,
+      headers: {
+        ...options.headers,
+      },
+    })
+    .then(res => {
+      return (res._bodyInit || res._bodyText)
+        ? res.json()
+        : {};
+    })
+    .catch(err => {
+      if (err.message === 'Unexpected end of JSON input') {
+        return Promise.reject();
+      }
     });
   }
 }
@@ -23,10 +38,17 @@ function blocks(options, param) {
  * @param {string|number} param - Hash, height or commit
  */
 function headers(options, param) {
-  return request({
-    ...options,
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/headers/${param}`,
+  }), {
     method: 'GET',
-    path: `/v1/headers/${param}`,
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(res => {
+    return res.json();
   });
 }
 
@@ -35,11 +57,23 @@ function headers(options, param) {
  * @param {Object} options
  */
 function chain(options) {
-  return request({
-    ...options,
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/chain`,
+  }), {
     method: 'GET',
-    path: `/v1/chain`,
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(res => {
+    return res.json();
   });
+  // return request({
+  //   ...options,
+  //   method: 'GET',
+  //   path: `/v1/chain`,
+  // });
 }
 
 /**
@@ -47,11 +81,23 @@ function chain(options) {
  * @param {Object} options
  */
 function chainCompact(options) {
-  return request({
-    ...options,
-    method: 'POST',
-    path: `/v1/chain/compact`,
-  }, responseCode);
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/chain/compact`,
+  }), {
+    method: 'GET',
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(res => {
+    return { status: res.status, statusText: res.statusText };
+  });
+  // return request({
+  //   ...options,
+  //   method: 'POST',
+  //   path: `/v1/chain/compact`,
+  // }, responseCode);
 }
 
 /**
@@ -59,11 +105,23 @@ function chainCompact(options) {
  * @param {Object} options
  */
 function chainValidate(options) {
-  return request({
-    ...options,
-    method: 'POST',
-    path: `/v1/chain/validate`,
-  }, responseCode);
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/chain/validate`,
+  }), {
+    method: 'GET',
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(res => {
+    return { status: res.status, statusText: res.statusText };
+  });
+  // return request({
+  //   ...options,
+  //   method: 'POST',
+  //   path: `/v1/chain/validate`,
+  // }, responseCode);
 }
 
 /**
@@ -73,11 +131,26 @@ function chainValidate(options) {
  */
 function chainOutputsByIds(options, ids) {
   const search = { id: ids };
-  return request({
-    ...options,
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/chain/outputs/byids`,
+    query: {
+      id: ids,
+    },
+  }), {
     method: 'GET',
-    path: `/v1/chain/outputs/byids?${querystring.stringify(search)}`,
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(res => {
+    return res.json();
   });
+  // return request({
+  //   ...options,
+  //   method: 'GET',
+  //   path: `/v1/chain/outputs/byids?${querystring.stringify(search)}`,
+  // });
 }
 
 /**
@@ -92,11 +165,24 @@ function chainOutputsByHeight(options, params) {
     start_height: params.startHeight,
     end_height: params.endHeight,
   };
-  return request({
-    ...options,
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/chain/outputs/byheight`,
+    query: search,
+  }), {
     method: 'GET',
-    path: `/v1/chain/outputs/byheight?${querystring.stringify(search)}`,
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(res => {
+    return res.json();
   });
+  // return request({
+  //   ...options,
+  //   method: 'GET',
+  //   path: `/v1/chain/outputs/byheight?${querystring.stringify(search)}`,
+  // });
 }
 
 /**
@@ -104,11 +190,23 @@ function chainOutputsByHeight(options, params) {
  * @param {Object} options
  */
 function status(options) {
-  return request({
-    ...options,
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/status`,
+  }), {
     method: 'GET',
-    path: `/v1/status`,
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(res => {
+    return res.json();
   });
+  // return request({
+  //   ...options,
+  //   method: 'GET',
+  //   path: `/v1/status`,
+  // });
 }
 
 /**
@@ -116,11 +214,23 @@ function status(options) {
  * @param {Object} options
  */
 function txhashsetRoots(options) {
-  return request({
-    ...options,
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/txhashset/roots`,
+  }), {
     method: 'GET',
-    path: `/v1/txhashset/roots`,
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(res => {
+    return res.json();
   });
+  // return request({
+  //   ...options,
+  //   method: 'GET',
+  //   path: `/v1/txhashset/roots`,
+  // });
 }
 
 /**
@@ -130,11 +240,24 @@ function txhashsetRoots(options) {
  */
 function txhashsetLastOutputs(options, n) {
   const search = { n: n };
-  return request({
-    ...options,
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/txhashset/lastoutputs`,
+    query: search,
+  }), {
     method: 'GET',
-    path: `/v1/txhashset/lastoutputs?${querystring.stringify(search)}`,
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(res => {
+    return res.json();
   });
+  // return request({
+  //   ...options,
+  //   method: 'GET',
+  //   path: `/v1/txhashset/lastoutputs?${querystring.stringify(search)}`,
+  // });
 }
 
 /**
@@ -144,11 +267,24 @@ function txhashsetLastOutputs(options, n) {
  */
 function txhashsetLastRangeProofs(options, n) {
   const search = { n: n };
-  return request({
-    ...options,
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/txhashset/lastrangeproofs`,
+    query: search,
+  }), {
     method: 'GET',
-    path: `/v1/txhashset/lastrangeproofs?${querystring.stringify(search)}`,
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(res => {
+    return res.json();
   });
+  // return request({
+  //   ...options,
+  //   method: 'GET',
+  //   path: `/v1/txhashset/lastrangeproofs?${querystring.stringify(search)}`,
+  // });
 }
 
 /**
@@ -158,11 +294,24 @@ function txhashsetLastRangeProofs(options, n) {
  */
 function txhashsetLastKernels(options, n) {
   const search = { n: n };
-  return request({
-    ...options,
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/txhashset/lastkernels`,
+    query: search,
+  }), {
     method: 'GET',
-    path: `/v1/txhashset/lastkernels?${querystring.stringify(search)}`,
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(res => {
+    return res.json();
   });
+  // return request({
+  //   ...options,
+  //   method: 'GET',
+  //   path: `/v1/txhashset/lastkernels?${querystring.stringify(search)}`,
+  // });
 }
 
 /**
@@ -177,11 +326,24 @@ function txhashsetOutputs(options, params) {
     start_index: params.startIndex,
     max: params.max,
   };
-  return request({
-    ...options,
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/txhashset/outputs`,
+    query: search,
+  }), {
     method: 'GET',
-    path: `/v1/txhashset/outputs?${querystring.stringify(search)}`,
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(res => {
+    return res.json();
   });
+  // return request({
+  //   ...options,
+  //   method: 'GET',
+  //   path: `/v1/txhashset/outputs?${querystring.stringify(search)}`,
+  // });
 }
 
 /**
@@ -191,11 +353,24 @@ function txhashsetOutputs(options, params) {
  */
 function txhashsetMerkleProof(options, id) {
   const search = { id: id };
-  return request({
-    ...options,
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/txhashset/merkleproof`,
+    query: search,
+  }), {
     method: 'GET',
-    path: `/v1/txhashset/merkleproof?${querystring.stringify(search)}`,
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(res => {
+    return res.json();
   });
+  // return request({
+  //   ...options,
+  //   method: 'GET',
+  //   path: `/v1/txhashset/merkleproof?${querystring.stringify(search)}`,
+  // });
 }
 
 /**
@@ -203,11 +378,24 @@ function txhashsetMerkleProof(options, id) {
  * @param {Object} options
  */
 function pool(options) {
-  return request({
-    ...options,
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/pool`,
+    query: search,
+  }), {
     method: 'GET',
-    path: `/v1/pool`,
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(res => {
+    return res.json();
   });
+  // return request({
+  //   ...options,
+  //   method: 'GET',
+  //   path: `/v1/pool`,
+  // });
 }
 
 /**
