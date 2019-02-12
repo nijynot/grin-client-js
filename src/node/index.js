@@ -168,6 +168,7 @@ function status(options) {
 /**
  * GET TxHashSet Roots
  * @param {Object} options
+ * @returns {Promise.<Object>}
  */
 function txhashsetRoots(options) {
   return request(url.format({
@@ -186,6 +187,7 @@ function txhashsetRoots(options) {
  * GET TxHashSet Last Outputs
  * @param {Object} options
  * @param {number} n
+ * @returns {Promise.<Object>}
  */
 function txhashsetLastOutputs(options, n) {
   const search = { n: n };
@@ -206,6 +208,7 @@ function txhashsetLastOutputs(options, n) {
  * GET TxHashSet Last Range Proofs
  * @param{Object} options
  * @param{number} n
+ * @returns {Promise.<Object>}
  */
 function txhashsetLastRangeProofs(options, n) {
   const search = { n: n };
@@ -226,6 +229,7 @@ function txhashsetLastRangeProofs(options, n) {
  * GET TxHashSet Last Kernels
  * @param {Object} options
  * @param {number} n
+ * @returns {Promise.<Object>}
  */
 function txhashsetLastKernels(options, n) {
   const search = { n: n };
@@ -248,6 +252,7 @@ function txhashsetLastKernels(options, n) {
  * @param {Object} params
  * @param {number} params.startIndex
  * @param {number} params.max
+ * @returns {Promise.<Object>}
  */
 function txhashsetOutputs(options, params) {
   const search = {
@@ -271,6 +276,7 @@ function txhashsetOutputs(options, params) {
  * GET TxHashSet Merkle Proof
  * @param {Object} options
  * @param {string} id
+ * @returns {Promise.<Object>}
  */
 function txhashsetMerkleProof(options, id) {
   const search = { id: id };
@@ -290,6 +296,7 @@ function txhashsetMerkleProof(options, id) {
 /**
  * GET Pool
  * @param {Object} options
+ * @returns {Promise.<Object>}
  */
 function pool(options) {
   return request(url.format({
@@ -310,6 +317,7 @@ function pool(options) {
  * @param {Object} params
  * @param {string} file - hex encoded transaction
  * @param {bool} params.fluff - Adds ?fluff at the end of the URL to bypass Dandelion relay.
+ * @returns {Promise.<Object>}
  */
 function poolPush(options, params) {
   // TODO: Implement file data param and fluff
@@ -327,6 +335,7 @@ function poolPush(options, params) {
  * POST Peers Ban
  * @param {Object} options
  * @param {string} addr
+ * @returns {Promise.<Object>}
  */
 function peersBan(options, addr) {
   return request(url.format({
@@ -345,6 +354,7 @@ function peersBan(options, addr) {
  * POST Peers Unban
  * @param {Object} options
  * @param {string} addr
+ * @returns {Promise.<Object>}
  */
 function peersUnban(options, addr) {
   return request(url.format({
@@ -362,6 +372,7 @@ function peersUnban(options, addr) {
 /**
  * GET Peers All
  * @param {Object} options
+ * @returns {Promise.<Object>}
  */
 function peersAll(options) {
   return request(url.format({
@@ -379,6 +390,7 @@ function peersAll(options) {
 /**
  * GET Peers Connected
  * @param {Object} options
+ * @returns {Promise.<Object>}
  */
 function peersConnected(options) {
   return request(url.format({
@@ -397,6 +409,7 @@ function peersConnected(options) {
  * GET Peers
  * @param {Object} options
  * @param {string} addr - Network address of the peer, a.b.c.d
+ * @returns {Promise.<Object>}
  */
 function peers(options, addr) {
   return request(url.format({
