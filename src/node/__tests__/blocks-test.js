@@ -1,30 +1,17 @@
 const { describe, it } = require('mocha');
 const { expect } = require('chai');
 const nock = require('nock');
-// const fetchMock = require('fetch-mock');
 
-const node = require('../index');
 const GrinClient = require('../../client');
-const fetch = require('../../utils/fetch');
+const { base64 } = require('../../utils/common');
 
-// global.fetch = fetch;
-
-// console.log(global);
-
-// fetchMock.config = Object.assign({}, fetchMock.config, {
-//   fetch: global.fetch,
-// });
-
-function base64(i) {
-  return Buffer.from(i, 'utf8').toString('base64');
-}
-
-const testOptions = {
+const options = {
   protocol: 'http',
   hostname: '127.0.0.1',
   port: 3413,
   username: 'grin',
   password: 'API_SECRET',
+  auth: 'grin:API_SECRET',
 };
 
 describe('Node API: GET Blocks', () => {
@@ -80,22 +67,33 @@ describe('Node API: GET Blocks', () => {
 
     nock('http://127.0.0.1:3413')
       .get('/v1/blocks/1')
-      .matchHeader('authorization', 'Basic Z3JpbjpBUElfU0VDUkVU')
-      .reply(404, genesisBlock);
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
+      .reply(200, genesisBlock);
 
-    const grin = new GrinClient(testOptions);
-
-    const block = await grin.blocks(1);
-    expect(block).to.deep.equal(genesisBlock);
+    const grin = new GrinClient(options);
+    expect(await grin.blocks(1)).to.deep.equal(genesisBlock);
   });
 
-  it('get empty block and status code 404', async () => {
+  it('resolve empty block with status code 404', async () => {
     nock('http://127.0.0.1:3413')
       .get('/v1/blocks/1')
-      .reply(404);
+      .reply(404, '');
 
-    const grin = new GrinClient(testOptions);
-    const block = await grin.blocks(1)
-    expect(block).to.deep.equal({});
+    const grin = new GrinClient(options);
+    expect(await grin.blocks(1)).to.deep.equal({});
+  });
+
+  it ('reject if out of bounds with status code 400', async () => {
+    nock('http://127.0.0.1:3413')
+      .get('/v1/blocks/1000000000000')
+      .reply(400, 'failed to parse input: Not found.');
+
+    const grin = new GrinClient(options);
+    try {
+      await grin.blocks(1000000000000);
+    } catch (e) {
+      expect(e.status).to.equal(400);
+      expect(e.message).to.equal('failed to parse input: Not found.');
+    }
   });
 });

@@ -3,13 +3,15 @@ const { expect } = require('chai');
 const nock = require('nock');
 
 const GrinClient = require('../../client');
+const { base64 } = require('../../utils/common');
 
-const testOptions = {
+const options = {
   protocol: 'http',
   hostname: '127.0.0.1',
   port: 3413,
   username: 'grin',
   password: 'API_SECRET',
+  auth: 'grin:API_SECRET',
 };
 
 describe('Node API: GET Status', () => {
@@ -26,20 +28,22 @@ describe('Node API: GET Status', () => {
       }
     };
 
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+    nock('http://127.0.0.1:3413')
       .get('/v1/status')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(200, res);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     expect(await grin.status()).to.deep.equal(res);
   });
 
   it('reject if status code 404', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+    nock('http://127.0.0.1:3413')
       .get('/v1/status')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(404);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     try {
       await grin.status();
     } catch (e) {

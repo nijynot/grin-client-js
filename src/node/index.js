@@ -2,11 +2,13 @@ const querystring = require('querystring');
 const url = require('url');
 
 const request = require('../utils/request');
+const { responseJson, responseStatus } = require('../utils/common')
 
 /**
  * GET Blocks
  * @param {Object} options
  * @param {string|number} param - Hash, height or commit
+ * @returns {Promise.<Object>}
  */
 function blocks(options, param) {
   if (typeof param !== 'array') {
@@ -19,16 +21,7 @@ function blocks(options, param) {
         ...options.headers,
       },
     })
-    .then(res => {
-      return (res._bodyInit || res._bodyText)
-        ? res.json()
-        : {};
-    })
-    .catch(err => {
-      if (err.message === 'Unexpected end of JSON input') {
-        return Promise.reject();
-      }
-    });
+    .then(responseJson());
   }
 }
 
@@ -36,6 +29,7 @@ function blocks(options, param) {
  * GET Headers
  * @param {Object} options
  * @param {string|number} param - Hash, height or commit
+ * @returns {Promise.<Object>}
  */
 function headers(options, param) {
   return request(url.format({
@@ -47,14 +41,13 @@ function headers(options, param) {
       ...options.headers,
     },
   })
-  .then(res => {
-    return res.json();
-  });
+  .then(responseJson());
 }
 
 /**
  * GET Chain
  * @param {Object} options
+ * @returns {Promise.<Object>}
  */
 function chain(options) {
   return request(url.format({
@@ -66,68 +59,50 @@ function chain(options) {
       ...options.headers,
     },
   })
-  .then(res => {
-    return res.json();
-  });
-  // return request({
-  //   ...options,
-  //   method: 'GET',
-  //   path: `/v1/chain`,
-  // });
+  .then(responseJson());
 }
 
 /**
  * POST Chain Compact
  * @param {Object} options
+ * @returns {Promise.<Object>}
  */
 function chainCompact(options) {
   return request(url.format({
     ...options.url,
     pathname: `/v1/chain/compact`,
   }), {
-    method: 'GET',
+    method: 'POST',
     headers: {
       ...options.headers,
     },
   })
-  .then(res => {
-    return { status: res.status, statusText: res.statusText };
-  });
-  // return request({
-  //   ...options,
-  //   method: 'POST',
-  //   path: `/v1/chain/compact`,
-  // }, responseCode);
+  .then(responseStatus());
 }
 
 /**
  * POST Chain Validate
  * @param {Object} options
+ * @returns {Promise.<Object>}
  */
 function chainValidate(options) {
   return request(url.format({
     ...options.url,
     pathname: `/v1/chain/validate`,
   }), {
-    method: 'GET',
+    method: 'POST',
     headers: {
       ...options.headers,
     },
   })
-  .then(res => {
-    return { status: res.status, statusText: res.statusText };
-  });
-  // return request({
-  //   ...options,
-  //   method: 'POST',
-  //   path: `/v1/chain/validate`,
-  // }, responseCode);
+  .then(responseStatus());
 }
 
 /**
  * GET Chain Outputs By IDs
  * @param {Object} options
  * @param {Array|string} ids
+ * @returns {Promise.<Object>}
  */
 function chainOutputsByIds(options, ids) {
   const search = { id: ids };
@@ -143,14 +118,7 @@ function chainOutputsByIds(options, ids) {
       ...options.headers,
     },
   })
-  .then(res => {
-    return res.json();
-  });
-  // return request({
-  //   ...options,
-  //   method: 'GET',
-  //   path: `/v1/chain/outputs/byids?${querystring.stringify(search)}`,
-  // });
+  .then(responseJson());
 }
 
 /**
@@ -159,6 +127,7 @@ function chainOutputsByIds(options, ids) {
  * @param {Object} params
  * @param {number} params.startHeight
  * @param {number} params.endHeight
+ * @returns {Promise.<Object>}
  */
 function chainOutputsByHeight(options, params) {
   const search = {
@@ -175,19 +144,13 @@ function chainOutputsByHeight(options, params) {
       ...options.headers,
     },
   })
-  .then(res => {
-    return res.json();
-  });
-  // return request({
-  //   ...options,
-  //   method: 'GET',
-  //   path: `/v1/chain/outputs/byheight?${querystring.stringify(search)}`,
-  // });
+  .then(responseJson());
 }
 
 /**
  * GET Status
  * @param {Object} options
+ * @returns {Promise.<Object>}
  */
 function status(options) {
   return request(url.format({
@@ -199,14 +162,7 @@ function status(options) {
       ...options.headers,
     },
   })
-  .then(res => {
-    return res.json();
-  });
-  // return request({
-  //   ...options,
-  //   method: 'GET',
-  //   path: `/v1/status`,
-  // });
+  .then(responseJson());
 }
 
 /**
@@ -223,14 +179,7 @@ function txhashsetRoots(options) {
       ...options.headers,
     },
   })
-  .then(res => {
-    return res.json();
-  });
-  // return request({
-  //   ...options,
-  //   method: 'GET',
-  //   path: `/v1/txhashset/roots`,
-  // });
+  .then(responseJson());
 }
 
 /**
@@ -250,14 +199,7 @@ function txhashsetLastOutputs(options, n) {
       ...options.headers,
     },
   })
-  .then(res => {
-    return res.json();
-  });
-  // return request({
-  //   ...options,
-  //   method: 'GET',
-  //   path: `/v1/txhashset/lastoutputs?${querystring.stringify(search)}`,
-  // });
+  .then(responseJson());
 }
 
 /**
@@ -277,14 +219,7 @@ function txhashsetLastRangeProofs(options, n) {
       ...options.headers,
     },
   })
-  .then(res => {
-    return res.json();
-  });
-  // return request({
-  //   ...options,
-  //   method: 'GET',
-  //   path: `/v1/txhashset/lastrangeproofs?${querystring.stringify(search)}`,
-  // });
+  .then(responseJson());
 }
 
 /**
@@ -304,14 +239,7 @@ function txhashsetLastKernels(options, n) {
       ...options.headers,
     },
   })
-  .then(res => {
-    return res.json();
-  });
-  // return request({
-  //   ...options,
-  //   method: 'GET',
-  //   path: `/v1/txhashset/lastkernels?${querystring.stringify(search)}`,
-  // });
+  .then(responseJson());
 }
 
 /**
@@ -336,14 +264,7 @@ function txhashsetOutputs(options, params) {
       ...options.headers,
     },
   })
-  .then(res => {
-    return res.json();
-  });
-  // return request({
-  //   ...options,
-  //   method: 'GET',
-  //   path: `/v1/txhashset/outputs?${querystring.stringify(search)}`,
-  // });
+  .then(responseJson());
 }
 
 /**
@@ -363,14 +284,7 @@ function txhashsetMerkleProof(options, id) {
       ...options.headers,
     },
   })
-  .then(res => {
-    return res.json();
-  });
-  // return request({
-  //   ...options,
-  //   method: 'GET',
-  //   path: `/v1/txhashset/merkleproof?${querystring.stringify(search)}`,
-  // });
+  .then(responseJson());
 }
 
 /**
@@ -381,21 +295,13 @@ function pool(options) {
   return request(url.format({
     ...options.url,
     pathname: `/v1/pool`,
-    query: search,
   }), {
     method: 'GET',
     headers: {
       ...options.headers,
     },
   })
-  .then(res => {
-    return res.json();
-  });
-  // return request({
-  //   ...options,
-  //   method: 'GET',
-  //   path: `/v1/pool`,
-  // });
+  .then(responseJson());
 }
 
 /**
@@ -409,11 +315,12 @@ function poolPush(options, params) {
   // TODO: Implement file data param and fluff
   // const fluff = (params.fluff) ? 'fluff' : '';
   // const data = { file: params.file };
-  return request({
-    ...options,
-    method: 'POST',
-    path: `/v1/pool/push`,
-  });
+  // return request({
+  //   ...options,
+  //   method: 'POST',
+  //   path: `/v1/pool/push`,
+  // });
+  return;
 }
 
 /**
@@ -422,11 +329,16 @@ function poolPush(options, params) {
  * @param {string} addr
  */
 function peersBan(options, addr) {
-  return request({
-    ...options,
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/peers/${addr}/ban`,
+  }), {
     method: 'POST',
-    path: `/v1/peers/${addr}/ban`,
-  }, responseCode);
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(responseStatus());
 }
 
 /**
@@ -435,11 +347,16 @@ function peersBan(options, addr) {
  * @param {string} addr
  */
 function peersUnban(options, addr) {
-  return request({
-    ...options,
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/peers/${addr}/unban`,
+  }), {
     method: 'POST',
-    path: `/v1/peers/${addr}/unban`,
-  }, responseCode);
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(responseStatus());
 }
 
 /**
@@ -447,11 +364,16 @@ function peersUnban(options, addr) {
  * @param {Object} options
  */
 function peersAll(options) {
-  return request({
-    ...options,
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/peers/all`,
+  }), {
     method: 'GET',
-    path: `/v1/peers/all`,
-  });
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(responseJson());
 }
 
 /**
@@ -459,11 +381,16 @@ function peersAll(options) {
  * @param {Object} options
  */
 function peersConnected(options) {
-  return request({
-    ...options,
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/peers/connected`,
+  }), {
     method: 'GET',
-    path: `/v1/peers/connected`,
-  });
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(responseJson());
 }
 
 /**
@@ -472,11 +399,16 @@ function peersConnected(options) {
  * @param {string} addr - Network address of the peer, a.b.c.d
  */
 function peers(options, addr) {
-  return request({
-    ...options,
+  return request(url.format({
+    ...options.url,
+    pathname: `/v1/peers/${addr}`,
+  }), {
     method: 'GET',
-    path: `/v1/peers/${addr}`,
-  });
+    headers: {
+      ...options.headers,
+    },
+  })
+  .then(responseJson());
 }
 
 module.exports = {

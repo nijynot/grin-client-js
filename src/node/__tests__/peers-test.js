@@ -3,65 +3,73 @@ const { expect } = require('chai');
 const nock = require('nock');
 
 const GrinClient = require('../../client');
+const { base64 } = require('../../utils/common');
 
-const testOptions = {
+const options = {
   protocol: 'http',
   hostname: '127.0.0.1',
   port: 3413,
   username: 'grin',
   password: 'API_SECRET',
+  auth: 'grin:API_SECRET',
 };
 
 describe('Node API: POST Peers Ban', () => {
-  it('resolve peers ban', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('resolve .peersBan', async () => {
+    nock('http://127.0.0.1:3413')
       .post('/v1/peers/192.168.1.1:13414/ban')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(200);
 
-    const grin = new GrinClient(testOptions);
-    expect(await grin.peersBan('192.168.1.1:13414')).to.equal(200);
+    const grin = new GrinClient(options);
+    const { status } = await grin.peersBan('192.168.1.1:13414');
+    expect(status).to.equal(200);
   });
 
-  it('reject if status code 500', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('reject .peersBan if status code 400', async () => {
+    nock('http://127.0.0.1:3413')
       .post('/v1/peers/192.168.1.1:13414/ban')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(400);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     try {
-      await grin.peersBan('192.168.1.1:13414');
+      const { status } = await grin.peersBan('192.168.1.1:13414');
     } catch (e) {
-      expect(e.message).to.equal(`Request Failed. Status Code: ${400}`);
+      expect(e.status).to.equal(400);
     }
   });
 });
 
 describe('Node API: POST Peers Unban', () => {
-  it('resolve peers ban', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('resolve .peersUnban', async () => {
+    nock('http://127.0.0.1:3413')
       .post('/v1/peers/192.168.1.1:13414/unban')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(200);
 
-    const grin = new GrinClient(testOptions);
-    expect(await grin.peersUnban('192.168.1.1:13414')).to.equal(200);
+    const grin = new GrinClient(options);
+    const { status } = await grin.peersUnban('192.168.1.1:13414');
+    expect(status).to.equal(200);
   });
 
-  it('reject if status code 500', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('reject .peersUnban if status code 400', async () => {
+    nock('http://127.0.0.1:3413')
       .post('/v1/peers/192.168.1.1:13414/unban')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(400);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     try {
       await grin.peersUnban('192.168.1.1:13414');
     } catch (e) {
-      expect(e.message).to.equal(`Request Failed. Status Code: ${400}`);
+      expect(e.status).to.equal(400);
     }
   });
 });
 
 describe('Node API: GET Peers All', () => {
-  it('resolve peers all', async () => {
+  it('resolve .peersAll', async () => {
     const res = [
       {
         "addr": ":3414",
@@ -155,30 +163,32 @@ describe('Node API: GET Peers All', () => {
       }
     ];
 
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+    nock('http://127.0.0.1:3413')
       .get('/v1/peers/all')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(200, res);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     expect(await grin.peersAll()).to.deep.equal(res);
   });
 
-  it('reject if status code 400', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('reject .peersAll if status code 400', async () => {
+    nock('http://127.0.0.1:3413')
       .get('/v1/peers/all')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(400);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     try {
       await grin.peersAll();
     } catch (e) {
-      expect(e.message).to.equal(`Request Failed. Status Code: ${400}`);
+      expect(e.status).to.equal(400);
     }
   });
 });
 
 describe('Node API: GET Peers Connected', () => {
-  it('resolve peers connected', async () => {
+  it('resolve .peersConnected', async () => {
     const res = [
       {
         "capabilities": { "bits": 15 },
@@ -254,30 +264,32 @@ describe('Node API: GET Peers Connected', () => {
       }
     ];
 
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+    nock('http://127.0.0.1:3413')
       .get('/v1/peers/connected')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(200, res);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     expect(await grin.peersConnected()).to.deep.equal(res);
   });
 
-  it('reject if status code 500', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('reject .peersConnected if status code 500', async () => {
+    nock('http://127.0.0.1:3413')
       .get('/v1/peers/connected')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(500);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     try {
       await grin.peersConnected();
     } catch (e) {
-      expect(e.message).to.equal(`Request Failed. Status Code: ${500}`);
+      expect(e.status).to.equal(500);
     }
   });
 });
 
 describe('Node API: GET Peers', () => {
-  it('resolve peers', async () => {
+  it('resolve .peers', async () => {
     const res = {
       "addr": "192.168.1.2:3414",
       "capabilities": { "bits": 15 },
@@ -288,24 +300,27 @@ describe('Node API: GET Peers', () => {
       "last_connected": 1548447743
     };
 
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+    nock('http://127.0.0.1:3413')
       .get('/v1/peers/192.168.1.2:3414')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(200, res);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     expect(await grin.peers('192.168.1.2:3414')).to.deep.equal(res);
   });
 
-  it('reject if status code 404', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('reject .peers if status code 400', async () => {
+    nock('http://127.0.0.1:3413')
       .get('/v1/peers/192.168.1.2:3414')
-      .reply(404);
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
+      .reply(400, 'peer address unrecognized: /v1/peers/192.168.1.2:3414');
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     try {
       await grin.peers('192.168.1.2:3414');
     } catch (e) {
-      expect(e.message).to.equal(`Request Failed. Status Code: ${404}`);
+      expect(e.status).to.equal(400);
+      expect(e.message).to.equal('peer address unrecognized: /v1/peers/192.168.1.2:3414');
     }
   });
 });

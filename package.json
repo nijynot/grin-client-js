@@ -1,11 +1,11 @@
 {
   "name": "grin-client",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A JavaScript client for Grin's V1 API.",
   "main": "./src/index.js",
   "scripts": {
     "test": "mocha src/**/__tests__/**/*-test.js",
-    "test-block": "mocha src/**/__tests__/**/blocks-test.js"
+    "test-smol": "mocha src/**/__tests__/**/blocks-test.js"
   },
   "author": {
     "email": "nijynot@gmail.com",
@@ -18,9 +18,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "fetch-mock": "^7.3.0",
     "mocha": "^5.2.0",
-    "nock": "git+https://github.com/nijynot/nock.git",
-    "node-fetch": "^2.3.0"
+    "nock": "git+https://github.com/nijynot/nock.git"
   }
 }

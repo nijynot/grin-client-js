@@ -3,17 +3,19 @@ const { expect } = require('chai');
 const nock = require('nock');
 
 const GrinClient = require('../../client');
+const { base64 } = require('../../utils/common');
 
-const testOptions = {
+const options = {
   protocol: 'http',
   hostname: '127.0.0.1',
   port: 3413,
   username: 'grin',
   password: 'API_SECRET',
+  auth: 'grin:API_SECRET',
 };
 
 describe('Node API: GET Chain', () => {
-  it('resolve chain', async () => {
+  it('resolve .chain', async () => {
     const chain = {
       "height": 14336,
       "last_block_pushed": "000000e5426ef5f541a2abad523f1418375cb2661a14108e26a4a355597aad48",
@@ -21,78 +23,85 @@ describe('Node API: GET Chain', () => {
       "total_difficulty": 7237340681596
     };
 
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+    nock('http://127.0.0.1:3413')
       .get('/v1/chain')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(200, chain);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     expect(await grin.chain()).to.deep.equal(chain);
   });
 
-  it('reject if status code 404', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('resolve .chain if status code 500', async () => {
+    nock('http://127.0.0.1:3413')
       .get('/v1/chain')
-      .reply(404);
+      .reply(500);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     try {
       await grin.chain();
     } catch (e) {
-      expect(e.message).to.equal(`Request Failed. Status Code: ${404}`);
+      expect(e.status).to.equal(500);
     }
   });
 });
 
 describe('Node API: POST Chain Compact', () => {
-  it('resolve chain compact', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('resolve .chainCompact', async () => {
+    nock('http://127.0.0.1:3413')
       .post('/v1/chain/compact')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(200);
 
-    const grin = new GrinClient(testOptions);
-    expect(await grin.chainCompact()).to.equal(200);
+    const grin = new GrinClient(options);
+    const { status } = await grin.chainCompact()
+    expect(status).to.equal(200);
   });
 
-  it('reject if status code 500', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('reject .chainCompact if status code is 500', async () => {
+    nock('http://127.0.0.1:3413')
       .post('/v1/chain/compact')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(500);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     try {
       await grin.chainCompact();
     } catch (e) {
-      expect(e.message).to.equal(`Request Failed. Status Code: ${500}`);
+      expect(e.status).to.equal(500);
     }
   });
 });
 
 describe('Node API: POST Chain Validate', () => {
-  it('resolve chain validate', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('resolve .chainValidate', async () => {
+    nock('http://127.0.0.1:3413')
       .post('/v1/chain/validate')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(200);
 
-    const grin = new GrinClient(testOptions);
-    expect(await grin.chainValidate()).to.equal(200);
+    const grin = new GrinClient(options);
+    const { status } = await grin.chainValidate()
+    expect(status).to.equal(200);
   });
 
-  it('reject if status code 500', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('reject .chainValidate if status code is 500', async () => {
+    nock('http://127.0.0.1:3413')
       .post('/v1/chain/validate')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(500);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     try {
       await grin.chainValidate();
     } catch (e) {
-      expect(e.message).to.equal(`Request Failed. Status Code: ${500}`);
+      expect(e.status).to.equal(500);
     }
   });
 });
 
 describe('Node API: GET Chain Outputs By IDs', () => {
-  it('resolve chain outputs by ids', async () => {
+  it('resolve .chainOutputsByIds', async () => {
     const res = [
       {
         "commit": "0955adbb59ffbf467ed720a0cc5c13ed466d9bf242a9b6946d3a9c0c517aaabfff",
@@ -101,43 +110,30 @@ describe('Node API: GET Chain Outputs By IDs', () => {
       }
     ];
 
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+    nock('http://127.0.0.1:3413')
       .get('/v1/chain/outputs/byids?id=0955adbb59ffbf467ed720a0cc5c13ed466d9bf242a9b6946d3a9c0c517aaabfff')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(200, res);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     expect(await grin.chainOutputsByIds('0955adbb59ffbf467ed720a0cc5c13ed466d9bf242a9b6946d3a9c0c517aaabfff')).to.deep.equal(res);
   });
 
-  it('reject if status code 404', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('resolve .chainOutputsByIds if status code is 404', async () => {
+    nock('http://127.0.0.1:3413')
       .get('/v1/chain/outputs/byids?id=0955adbb59ffbf467ed720a0cc5c13ed466d9bf242a9b6946d3a9c0c517aaabfff')
-      .reply(404);
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
+      .reply(404, '[]');
 
-    const grin = new GrinClient(testOptions);
-    try {
-      await grin.chainOutputsByIds('0955adbb59ffbf467ed720a0cc5c13ed466d9bf242a9b6946d3a9c0c517aaabfff')
-    } catch (e) {
-      expect(e.message).to.equal(`Request Failed. Status Code: ${404}`);
-    }
+    const grin = new GrinClient(options);
+    expect(await grin.chainOutputsByIds('0955adbb59ffbf467ed720a0cc5c13ed466d9bf242a9b6946d3a9c0c517aaabfff')).to.deep.equal([]);
   });
 
-  it('no query string, but with ?', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
-      .get('/v1/chain/outputs/byids?id=')
-      .reply(404);
-
-    const grin = new GrinClient(testOptions);
-    try {
-      await grin.chainOutputsByIds();
-    } catch (e) {
-      expect(e.message).to.equal(`Request Failed. Status Code: ${404}`);
-    }
-  });
+  // TODO: write test for array of ids
 });
 
 describe('Node API: GET Chain Outputs By Height', () => {
-  it('resolve chain outputs by ids', async () => {
+  it('resolve .chainOutputsByHeight', async () => {
     const res = [
       {
         "header": {
@@ -229,35 +225,24 @@ describe('Node API: GET Chain Outputs By Height', () => {
       }
     ];
 
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+    nock('http://127.0.0.1:3413')
       .get('/v1/chain/outputs/byheight?start_height=14000&end_height=14001')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(200, res);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     expect(await grin.chainOutputsByHeight({ startHeight: 14000, endHeight: 14001 })).to.deep.equal(res);
   });
 
-  it('resolve out of range', async () => {
+  it('resolve .chainOutputsByHeight if status code 404 and out of range', async () => {
     const res = [];
 
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+    nock('http://127.0.0.1:3413')
       .get('/v1/chain/outputs/byheight?start_height=1&end_height=1')
-      .reply(200, res);
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
+      .reply(404, '[]');
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     expect(await grin.chainOutputsByHeight({ startHeight: 1, endHeight: 1 })).to.deep.equal(res);
-  });
-
-  it('reject if status code 404', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
-      .get('/v1/chain/outputs/byheight?start_height=1&end_height=1')
-      .reply(404);
-
-    const grin = new GrinClient(testOptions);
-    try {
-      await grin.chainOutputsByHeight({ startHeight: 1, endHeight: 1 });
-    } catch (e) {
-      expect(e.message).to.equal(`Request Failed. Status Code: ${404}`);
-    }
   });
 });

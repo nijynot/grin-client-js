@@ -3,47 +3,51 @@ const { expect } = require('chai');
 const nock = require('nock');
 
 const GrinClient = require('../../client');
+const { base64 } = require('../../utils/common');
 
-const testOptions = {
+const options = {
   protocol: 'http',
   hostname: '127.0.0.1',
   port: 3413,
   username: 'grin',
   password: 'API_SECRET',
+  auth: 'grin:API_SECRET',
 };
 
 describe('Node API: GET TxHashSet Roots', () => {
-  it('resolve txhashset roots', async () => {
+  it('resolve .txhashsetRoots', async () => {
     const res = {
       "output_root_hash": "cab5bc6fd55bac0362ec926ba3314a5cba396ccdd7c34254eb15b7a43d7c410b",
       "range_proof_root_hash": "58047a56b05f41fdcc0c8bde68a06d051711947c223b89e9e245badae5c6c8ad",
       "kernel_root_hash": "2d5a06ae47dffc000a18d531372002e8918afe034ed9751e5990fd6a0ca55e17"
     };
 
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+    nock('http://127.0.0.1:3413')
       .get('/v1/txhashset/roots')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(200, res);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     expect(await grin.txhashsetRoots()).to.deep.equal(res);
   });
 
-  it('reject if status code 404', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('reject .txhashsetRoots if status code is 500', async () => {
+    nock('http://127.0.0.1:3413')
       .get('/v1/txhashset/roots')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(500);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     try {
       await grin.txhashsetRoots();
     } catch (e) {
-      expect(e.message).to.equal(`Request Failed. Status Code: ${500}`);
+      expect(e.status).to.equal(500);
     }
   });
 });
 
 describe('Node API: GET TxHashSet Last Outputs', () => {
-  it('resolve txhashset last outputs', async () => {
+  it('resolve .txhashsetLastOutputs', async () => {
     const res = [
       {
         "hash": "7cf78be66ab6bb3a08c060f5d3be480b16852e541bd882f27f9571929de9c4e7"
@@ -54,30 +58,32 @@ describe('Node API: GET TxHashSet Last Outputs', () => {
       { "hash": "b72ef50f27a1b94637d6c0570f7384fd35272bc55c1a02241cd7e4b26f9e766e" }
     ];
 
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+    nock('http://127.0.0.1:3413')
       .get('/v1/txhashset/lastoutputs?n=3')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(200, res);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     expect(await grin.txhashsetLastOutputs(3)).to.deep.equal(res);
   });
 
-  it('reject if status code not 200', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('reject .txhashsetLastOutputs if status code is 500', async () => {
+    nock('http://127.0.0.1:3413')
       .get('/v1/txhashset/lastoutputs?n=3')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(500);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     try {
       await grin.txhashsetLastOutputs(3);
     } catch (e) {
-      expect(e.message).to.equal(`Request Failed. Status Code: ${500}`);
+      expect(e.status).to.equal(500);
     }
   });
 });
 
 describe('Node API: GET TxHashSet Last Range Proofs', () => {
-  it('resolve txhashset last range proofs', async () => {
+  it('resolve .txhashsetLastRangeProofs', async () => {
     const res = [
       {
         "hash": "d31b194b9632af320b6db207c05d8a6f8af5528e67ce892418cea0e8d5a2bcde"
@@ -88,30 +94,32 @@ describe('Node API: GET TxHashSet Last Range Proofs', () => {
       { "hash": "09e5764a6a7112599ce1abac93614a473907ec012e6dab26c1e376e9368a1090" }
     ];
 
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+    nock('http://127.0.0.1:3413')
       .get('/v1/txhashset/lastrangeproofs?n=3')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(200, res);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     expect(await grin.txhashsetLastRangeProofs(3)).to.deep.equal(res);
   });
 
-  it('reject if status code not 200', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('reject .txhashsetLastRangeProofs if status code is 500', async () => {
+    nock('http://127.0.0.1:3413')
       .get('/v1/txhashset/lastrangeproofs?n=3')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(500);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     try {
       await grin.txhashsetLastRangeProofs(3);
     } catch (e) {
-      expect(e.message).to.equal(`Request Failed. Status Code: ${500}`);
+      expect(e.status).to.equal(500);
     }
   });
 });
 
 describe('Node API: GET TxHashSet Last Kernels', () => {
-  it('resolve txhashset last kernels', async () => {
+  it('resolve .txhashsetLastKernels', async () => {
     const res = [
       {
         "hash": "8f05868fec2fbca85547b8de943787c66672d33506d1ac8efb1d8c080ebb17f7"
@@ -122,30 +130,31 @@ describe('Node API: GET TxHashSet Last Kernels', () => {
       { "hash": "9939a693e4eb345539202d50322377b6a208dd9766f402aa8dd5cc5012bd9736" }
     ];
 
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+    nock('http://127.0.0.1:3413')
       .get('/v1/txhashset/lastkernels?n=3')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(200, res);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     expect(await grin.txhashsetLastKernels(3)).to.deep.equal(res);
   });
 
-  it('reject if status code not 200', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('reject .txhashsetLastKernels if status code is 500', async () => {
+    nock('http://127.0.0.1:3413')
       .get('/v1/txhashset/lastkernels?n=3')
       .reply(500);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     try {
       await grin.txhashsetLastKernels(3);
     } catch (e) {
-      expect(e.message).to.equal(`Request Failed. Status Code: ${500}`);
+      expect(e.status).to.equal(500);
     }
   });
 });
 
 describe('Node API: GET TxHashSet Outputs', () => {
-  it('resolve txhashset outputs', async () => {
+  it('resolve .txhashsetOutputs', async () => {
     const res = {
       "highest_index": 71150,
       "last_retrieved_index": 30,
@@ -183,30 +192,32 @@ describe('Node API: GET TxHashSet Outputs', () => {
       ]
     };
 
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+    nock('http://127.0.0.1:3413')
       .get('/v1/txhashset/outputs?start_index=1&max=3')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(200, res);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     expect(await grin.txhashsetOutputs({ startIndex: 1, max: 3 })).to.deep.equal(res);
   });
 
-  it('reject if status code not 200', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+  it('reject .txhashsetOutputs if status code is 500', async () => {
+    nock('http://127.0.0.1:3413')
       .get('/v1/txhashset/outputs?start_index=1&max=3')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(500);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     try {
       await grin.txhashsetOutputs({ startIndex: 1, max: 3 });
     } catch (e) {
-      expect(e.message).to.equal(`Request Failed. Status Code: ${500}`);
+      expect(e.status).to.equal(500);
     }
   });
 });
 
 describe('Node API: GET TxHashSet Merkle Proof', () => {
-  it('resolve txhashset merkle proof', async () => {
+  it('resolve .txhashsetMerkleProof', async () => {
     const res = {
       "output_type": "Coinbase",
       "commit": "000000000000000000000000000000000000000000000000000000000000000000",
@@ -218,24 +229,35 @@ describe('Node API: GET TxHashSet Merkle Proof', () => {
       "mmr_index": 136479
     };
 
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
+    nock('http://127.0.0.1:3413')
       .get('/v1/txhashset/merkleproof?id=096ee00539de2f17c45f58008bb859a52c6adf7cbd681c3e44f898b024b23f7130')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
       .reply(200, res);
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
     expect(await grin.txhashsetMerkleProof('096ee00539de2f17c45f58008bb859a52c6adf7cbd681c3e44f898b024b23f7130')).to.deep.equal(res);
   });
 
-  it('reject if status code not 200', async () => {
-    nock('http://grin:API_SECRET@127.0.0.1:3413')
-      .get('/v1/txhashset/merkleproof?id=096ee00539de2f17c45f58008bb859a52c6adf7cbd681c3e44f898b024b23f7130')
-      .reply(400);
+  it('resolve empty merkle proof if status code is 404', async () => {
+    nock('http://127.0.0.1:3413')
+      .get('/v1/txhashset/merkleproof?id=0123456789')
+      .reply(404, '');
 
-    const grin = new GrinClient(testOptions);
+    const grin = new GrinClient(options);
+    expect(await grin.txhashsetMerkleProof('0123456789')).to.deep.equal({});
+  });
+
+  it('reject .txhashsetMerkleProof if status code is 500', async () => {
+    nock('http://127.0.0.1:3413')
+      .get('/v1/txhashset/merkleproof?id=096ee00539de2f17c45f58008bb859a52c6adf7cbd681c3e44f898b024b23f7130')
+      .matchHeader('authorization', `Basic ${base64(options.auth)}`)
+      .reply(500);
+
+    const grin = new GrinClient(options);
     try {
       await grin.txhashsetMerkleProof('096ee00539de2f17c45f58008bb859a52c6adf7cbd681c3e44f898b024b23f7130');
     } catch (e) {
-      expect(e.message).to.equal(`Request Failed. Status Code: ${400}`);
+      expect(e.status).to.equal(500);
     }
   });
 });

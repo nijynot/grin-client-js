@@ -2,10 +2,7 @@ const url = require('url');
 
 const node = require('./node');
 const { foreign, owner } = require('./wallet');
-
-function base64(i) {
-  return Buffer.from(i, 'utf8').toString('base64');
-}
+const { base64 } = require('./utils/common')
 
 class GrinClient {
   constructor(options) {
@@ -17,8 +14,8 @@ class GrinClient {
 
     this.options = { url: {} };
     this.options.url.protocol = optionsCopy.protocol;
-    this.options.url.host = optionsCopy.host;
     this.options.url.hostname = optionsCopy.hostname;
+    this.options.url.host = optionsCopy.host;
     this.options.url.port = optionsCopy.port;
     this.options.headers = {
       ...optionsCopy.headers,

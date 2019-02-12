@@ -1,3 +1,4 @@
+const url = require('url');
 const http = require('http');
 const https = require('https');
 const FormData = require('form-data');
@@ -463,7 +464,7 @@ function urlToOptions(url) {
 
 function fetch(input, init) {
   return new Promise(async (resolve, reject) => {
-    var request = new Request(input, init)
+    const request = new Request(input, init)
 
     if (request.signal && request.signal.aborted) {
       return reject(new FetchError('Aborted', 'AbortError'))
@@ -474,9 +475,18 @@ function fetch(input, init) {
       headersObj[entry[0]] = entry[1];
     }
 
+    const urlObj = new url.URL(request.url);
+    const urlPath = (urlObj.search) ? urlObj.pathname + urlObj.search : urlObj.pathname
+
     // Node fetch
-    const req = http.request(request.url, {
+    const req = http.request({
+      host: urlObj.host,
+      hostname: urlObj.hostname,
+      path: urlPath,
+      port: urlObj.port,
+      protocol: urlObj.protocol,
       headers: headersObj,
+      method: request.method,
     }, (res) => {
       let data = '';
       res.setEncoding('utf8');
@@ -494,7 +504,6 @@ function fetch(input, init) {
     });
 
     req.on('error', (err) => {
-      console.log(err);
       reject(new TypeError('Network request failed'))
     });
 
