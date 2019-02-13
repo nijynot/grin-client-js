@@ -4,8 +4,7 @@
   "description": "A JavaScript client for Grin's V1 API.",
   "main": "./src/index.js",
   "scripts": {
-    "test": "mocha src/**/__tests__/**/*-test.js",
-    "test-smol": "mocha src/**/__tests__/**/blocks-test.js"
+    "test": "mocha src/**/__tests__/**/*-test.js"
   },
   "author": {
     "email": "nijynot@gmail.com",
@@ -20,5 +19,9 @@
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
     "nock": "git+https://github.com/nijynot/nock.git"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nijynot/grin-client-js"
   }
 }
