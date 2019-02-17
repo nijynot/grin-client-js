@@ -33,46 +33,90 @@ const GrinClient = require('grin-client');
 ```
 
 ## API
-**`.blocks(id)`**  
-&emsp;&emsp;`id`: `<string>` can be hash, height or commit.  
-**`.headers(id)`**  
-&emsp;&emsp;`id`: `<string>` can be hash, height or commit.  
-**`.chain()`**  
-**`.chainCompact()`**  
-**`.chainValidate()`**  
-**`.chainOutputsByIds(ids)`**  
-&emsp;&emsp;`ids`: `<string[]>`  
-**`.chainOutputsByHeight(obj)`**  
-&emsp;&emsp;`obj`: `<Object>`  
-&emsp;&emsp;&emsp;&emsp;`startHeight`: `<integer>`  
-&emsp;&emsp;&emsp;&emsp;`endHeight`: `<integer>`  
-**`.status()`**  
-**`.txhashsetRoots()`**  
-**`.txhashsetLastOutputs(n)`**  
-&emsp;&emsp;`n`: `<integer>`  
-**`.txhashsetLastRangeProofs(n)`**  
-&emsp;&emsp;`n`: `<integer>`  
-**`.txhashsetLastKernels(n)`**  
-&emsp;&emsp;`n`: `<integer>`  
-**`.txhashsetOutputs(obj)`**  
-&emsp;&emsp;`obj`: `<Object>`  
-&emsp;&emsp;&emsp;&emsp;`startIndex`: `<integer>`  
-&emsp;&emsp;&emsp;&emsp;`max`: `<integer>`  
-**`.txhashsetMerkleProof(id)`**  
-&emsp;&emsp;`id`: `<string>`  
-**`.pool()`**  
-**`.peersBan(addr)`**  
-&emsp;&emsp;`addr`: `<string>`  
-**`.peersUnban(addr)`**  
-&emsp;&emsp;`addr`: `<string>`  
-**`.peersAll()`**  
-**`.peersConnected()`**  
-**`.peers(addr)`**  
-&emsp;&emsp;`addr`: `<string>`
+
+### `new GrinClient(options)`
+Creates a new instance of a `GrinClient`.
+
+#### `options`
+##### `options.protocol`
+Either `http` or `https`  
+Type: `string`
+
+##### `options.hostname`
+Type: `string`
+
+##### `options.host`
+Type: `string`
+
+##### `options.port`
+Type: `number`
+
+##### `options.username`
+Type: `string`
+
+##### `options.password`
+The Grin node's `.api_secret`. Can be found in `~/.grin/main/.api_secret`.  
+Type: `string`
+
+### Instance methods
+
+#### `grin.blocks(id)`
+`id`: `<string>` can be hash, height or commit.  
+
+#### `grin.headers(id)`
+`id`: `<string>` can be hash, height or commit.  
+
+#### `grin.chain()`
+
+#### `grin.chainValidate()`
+
+#### `grin.chainOutputsByIds(ids)`
+`ids`: `<string[]>`  
+
+#### `grin.chainOutputsByHeight(obj)`
+`obj`: `<Object>`  
+`obj.startHeight`: `<integer>`  
+`obj.endHeight`: `<integer>`  
+
+#### `grin.status()`
+
+#### `grin.txhashsetRoots()`
+
+#### `grin.txhashsetLastOutputs(n)`
+`n`: `<integer>`  
+
+#### `grin.txhashsetLastRangeProofs(n)`
+`n`: `<integer>`  
+
+#### `grin.txhashsetLastKernels(n)`
+`n`: `<integer>`  
+
+#### `grin.txhashsetOutputs(n)`
+`obj`: `<Object>`  
+`obj.startIndex`: `<integer>`  
+`obj.max`: `<integer>`  
+
+#### `grin.txhashsetMerkleProof(n)`
+`id`: `<string>`  
+#### `grin.pool(n)`
+`id`: `<string>`  
+
+#### `grin.peersBan(addr)`
+`addr`: `<string>`  
+
+#### `grin.peersUnban(addr)`
+`addr`: `<string>`  
+
+#### `grin.peersAll()`
+
+#### `grin.peersConnected()`
+
+#### `grin.peers(addr)`
+`addr`: `<string>`
 
 ## Related
 [grin-ql-js](https://github.com/nijynot/grin-ql-js)  
-[API mimblewimble/grin](https://github.com/mimblewimble/grin/blob/master/doc/api/node_api.md)
+[mimblewimble/grin REST API](https://github.com/mimblewimble/grin/blob/master/doc/api/node_api.md)
 
 ## License
 MIT
