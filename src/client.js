@@ -21,6 +21,9 @@ class GrinClient {
       ...optionsCopy.headers,
       'Authorization': 'Basic ' + base64(`${optionsCopy.username}:${optionsCopy.password}`),
     };
+
+    this.wallet = {};
+    this.wallet.retrieveSummaryInfo = this._retrieveSummaryInfo.bind(this);
   }
 
   blocks(param) {
@@ -105,6 +108,10 @@ class GrinClient {
 
   peers(addr) {
     return node.peers(this.options, addr);
+  }
+
+  _retrieveSummaryInfo() {
+    return owner.retrieveSummaryInfo(this.options, {});
   }
 }
 
