@@ -23,7 +23,17 @@ class GrinClient {
     };
 
     this.wallet = {};
+    this.wallet.retrieveOutputs = this._retrieveOutputs.bind(this);
     this.wallet.retrieveSummaryInfo = this._retrieveSummaryInfo.bind(this);
+    this.wallet.nodeHeight = this._nodeHeight.bind(this);
+    this.wallet.retreiveTxs = this._retreiveTxs.bind(this);
+    this.wallet.retreiveStoredTx = this._retreiveStoredTx.bind(this);
+    this.wallet.issueSendTx = this._issueSendTx.bind(this);
+    this.wallet.finalizeTx = this._finalizeTx.bind(this);
+    this.wallet.cancelTx = this._cancelTx.bind(this);
+    this.wallet.postTx = this._postTx.bind(this);
+    this.wallet.repostTx = this._repostTx.bind(this);
+    this.wallet.issueBurnTx = this._issueBurnTx.bind(this);
   }
 
   blocks(param) {
@@ -110,8 +120,48 @@ class GrinClient {
     return node.peers(this.options, addr);
   }
 
-  _retrieveSummaryInfo() {
-    return owner.retrieveSummaryInfo(this.options, {});
+  _retrieveOutputs() {
+    return owner.retrieveOutputs(this.options);
+  }
+
+  _retrieveSummaryInfo(options) {
+    return owner.retrieveSummaryInfo(this.options, options);
+  }
+
+  _nodeHeight(options) {
+    return owner.nodeHeight(this.options, options);
+  }
+
+  _retreiveTxs(options) {
+    return owner.retreiveTxs(this.options, options);
+  }
+
+  _retreiveStoredTx(id) {
+    return owner.retreiveStoredTx(this.options, id);
+  }
+
+  _issueSendTx(params) {
+    return owner.issueSendTx(this.options, params);
+  }
+
+  _finalizeTx(options) {
+    return owner.finalizeTx(this.options, options);
+  }
+
+  _cancelTx(options) {
+    return owner.cancelTx(this.options, options);
+  }
+
+  _postTx(options) {
+    return owner.cancelTx(this.options, options);
+  }
+
+  _repostTx(options) {
+    return owner.repostTx(this.options, options);
+  }
+
+  _issueBurnTx() {
+    return owner.issueBurnTx(this.options);
   }
 }
 

@@ -11,7 +11,7 @@ function responseJson() {
       return Promise.reject({
         status: res.status,
         statusText: res.statusText,
-        message: res._bodyText
+        message: new Error(res._bodyText),
       });
     }
 
