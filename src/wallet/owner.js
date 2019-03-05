@@ -39,7 +39,7 @@ function retrieveOutputs(config, options) {
  * @param {bool} params.refresh
  * @returns {Promise.<Object>}
  */
-function retrieveSummaryInfo(options, params) {
+function retrieveSummaryInfo(options, params = {}) {
   const paramsCopy = {};
   if (params.refresh) paramsCopy.refresh = params.refresh;
 
@@ -63,7 +63,7 @@ function retrieveSummaryInfo(options, params) {
  * @param {bool} params.refresh
  * @returns {Promise.<Object>}
  */
-function nodeHeight(options, params) {
+function nodeHeight(options, params = {}) {
   const paramsCopy = {};
   if (params.refresh) paramsCopy.refresh = params.refresh;
 
@@ -89,7 +89,7 @@ function nodeHeight(options, params) {
  * @param {string} params.txId
  * @returns {Promise.<Object>}
  */
-function retreiveTxs(options, params) {
+function retreiveTxs(options, params = {}) {
   const paramsCopy = {};
   if (params.refresh) paramsCopy.refresh = params.refresh;
   if (params.id) paramsCopy.id = params.id;
@@ -147,7 +147,7 @@ function retreiveStoredTx(options, id) {
  * @param {bool} params.selectionStrategyIsUseAll - Whether to use all outputs (combine)
  * @returns {Promise.<Object>}
  */
-function issueSendTx(options, params) {
+function issueSendTx(options, params = {}) {
   const {
     amount,
     minimumConfirmations,
@@ -175,7 +175,7 @@ function issueSendTx(options, params) {
       if (value < 0) return { value, key };
     });
     return Promise.reject(
-      new TypeError(`Expected positive number \`${key}\` but got: ${value}.`);
+      new TypeError(`Expected positive number \`${key}\` but got: ${value}.`)
     );
   }
 
